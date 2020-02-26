@@ -3,6 +3,8 @@ using AnimalTracker;
 using System.Collections.Generic;
 
 public class Program {
+
+  private static bool _continue = true;
   static void Main()
   {
     // Create initial animals for list
@@ -11,64 +13,75 @@ public class Program {
     Animal giraffe = new Animal("giraffe", "savannah", "herbivore");
     List<Animal> Animals = new List<Animal>() {lion, crocodile, giraffe};
 
-    // Ask for initial input
-    Console.WriteLine("What do you want to do (Add/Show/Search)");
-    string input = Console.ReadLine();
+    while(_continue){
+      // Ask for initial input
+      Console.WriteLine("What do you want to do (Add/Show/Search/Quit)");
+      string input = Console.ReadLine().ToLower();
+      CheckQuit(input);
 
-    // Ask for input on animal to add, then show all animals
-    if (input == "Add"){
-      Console.WriteLine("What species of animal do you want to add?");
-      string speciesToAdd = Console.ReadLine();
-      Console.WriteLine("What is their habitat?");
-      string habitatToAdd = Console.ReadLine();
-      Console.WriteLine("What is their diet category? (carnivore, herbivore, omnivore)");
-      string dietToAdd = Console.ReadLine();
+      // Ask for input on animal to add, then show all animals
+      if (input == "add"){
+        Console.WriteLine("What species of animal do you want to add?");
+        string speciesToAdd = Console.ReadLine().ToLower();
+        CheckQuit(speciesToAdd);
+        Console.WriteLine("What is their habitat?");
+        string habitatToAdd = Console.ReadLine().ToLower();
+        CheckQuit(habitatToAdd);
+        Console.WriteLine("What is their diet category? (carnivore, herbivore, omnivore)");
+        string dietToAdd = Console.ReadLine().ToLower();
+        CheckQuit(dietToAdd);
 
-      Animal animalToAdd = new Animal(speciesToAdd, habitatToAdd, dietToAdd);
-      Animals.Add(animalToAdd);
-      Console.WriteLine("Animal added! ID: " + Animals[animalToAdd.GetTrackingNumber()].GetTrackingNumber() + " Species: " + Animals[animalToAdd.GetTrackingNumber()].GetSpecies() + " Habitat: " + Animals[animalToAdd.GetTrackingNumber()].GetHabitat() + " Diet Category: " + Animals[animalToAdd.GetTrackingNumber()].GetDietCategory());
-      PrintAllAnimals(Animals);
+        Animal animalToAdd = new Animal(speciesToAdd, habitatToAdd, dietToAdd);
+        Animals.Add(animalToAdd);
+        Console.WriteLine("Animal added! ID: " + Animals[animalToAdd.GetTrackingNumber()].GetTrackingNumber() + " Species: " + Animals[animalToAdd.GetTrackingNumber()].GetSpecies() + " Habitat: " + Animals[animalToAdd.GetTrackingNumber()].GetHabitat() + " Diet Category: " + Animals[animalToAdd.GetTrackingNumber()].GetDietCategory());
+        PrintAllAnimals(Animals);
 
-      // Show all animals 
-    } else if (input == "Show"){
-      PrintAllAnimals(Animals);
+        // Show all animals 
+      } else if (input == "show"){
+        PrintAllAnimals(Animals);
 
-      // Ask for what to search by, then ask for the specific item and show what found in search
-    } else if (input == "Search"){
-      Console.WriteLine("What to search by? (species/habitat/diet)");
-      string searchCriteria = Console.ReadLine();
-      List<Animal> AnimalSearch = new List<Animal>(0);
+        // Ask for what to search by, then ask for the specific item and show what found in search
+      } else if (input == "search"){
+        Console.WriteLine("What to search by? (species/habitat/diet)");
+        string searchCriteria = Console.ReadLine().ToLower();
+        CheckQuit(searchCriteria);
+        List<Animal> AnimalSearch = new List<Animal>(0);
 
-      if (searchCriteria == "species"){
-        Console.WriteLine("What species are you looking for?");
-        string speciesToSearch = Console.ReadLine();
-        foreach (Animal animalChecking in Animals)
-        {
-          if (animalChecking.CheckSpecies(speciesToSearch)){
-            AnimalSearch.Add(animalChecking);
+        if (searchCriteria == "species"){
+          Console.WriteLine("What species are you looking for?");
+          string speciesToSearch = Console.ReadLine().ToLower();
+          CheckQuit(speciesToSearch);
+          foreach (Animal animalChecking in Animals)
+          {
+            if (animalChecking.CheckSpecies(speciesToSearch)){
+              AnimalSearch.Add(animalChecking);
+            }
+          }
+        } else if (searchCriteria == "habitat"){
+          Console.WriteLine("What habitat are you looking for?");
+          string habitatToSearch = Console.ReadLine().ToLower();
+          CheckQuit(habitatToSearch);
+          foreach (Animal animalChecking in Animals)
+          {
+            if (animalChecking.CheckHabitat(habitatToSearch)){
+              AnimalSearch.Add(animalChecking);
+            }
+          }
+        } else if (searchCriteria == "diet"){
+          Console.WriteLine("What diet category are you looking for?");
+          string dietToSearch = Console.ReadLine().ToLower();
+          CheckQuit(dietToSearch);
+          foreach (Animal animalChecking in Animals)
+          {
+            if (animalChecking.CheckDiet(dietToSearch)){
+              AnimalSearch.Add(animalChecking);
+            }
           }
         }
-      } else if (searchCriteria == "habitat"){
-        Console.WriteLine("What habitat are you looking for?");
-        string habitatToSearch = Console.ReadLine();
-        foreach (Animal animalChecking in Animals)
-        {
-          if (animalChecking.CheckHabitat(habitatToSearch)){
-            AnimalSearch.Add(animalChecking);
-          }
-        }
-      } else if (searchCriteria == "diet"){
-        Console.WriteLine("What diet category are you looking for?");
-        string dietToSearch = Console.ReadLine();
-        foreach (Animal animalChecking in Animals)
-        {
-          if (animalChecking.CheckDiet(dietToSearch)){
-            AnimalSearch.Add(animalChecking);
-          }
-        }
+        PrintAllAnimals(AnimalSearch);
       }
-      PrintAllAnimals(AnimalSearch);
     }
+    
   }
   // Print all animals found in list
   public static void PrintAllAnimals(List<Animal> Animals)
@@ -80,8 +93,16 @@ public class Program {
     } else {
       foreach(Animal anAnimal in Animals)
       {
-        Console.WriteLine("ID: " + anAnimal.GetTrackingNumber() + " Species: " + anAnimal.GetSpecies() + " Habitat: " + anAnimal.GetSpecies() + " Diet Category: " + anAnimal.GetDietCategory());
+        Console.WriteLine("ID: " + anAnimal.GetTrackingNumber() + " Species: " + anAnimal.GetSpecies() + " Habitat: " + anAnimal.GetHabitat() + " Diet Category: " + anAnimal.GetDietCategory());
       }
+    }
+  }
+
+  public static void CheckQuit(String input)
+  {
+    if (input == "quit"){
+      _continue = false;
+      Environment.Exit(0);
     }
   }
 }
