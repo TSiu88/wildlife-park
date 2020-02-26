@@ -27,7 +27,7 @@ namespace AnimalTracker {
       return _trackingNumber;
     }
 
-    public int SetTrackingNumber()
+    private int SetTrackingNumber()
     {
       _currentNumber = _currentNumber +1;
       return _currentNumber;
