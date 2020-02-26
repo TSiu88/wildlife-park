@@ -15,6 +15,7 @@ public class Program {
     Console.WriteLine("What do you want to do (Add/Show/Search)");
     string input = Console.ReadLine();
 
+    // Ask for input on animal to add, then show all animals
     if (input == "Add"){
       Console.WriteLine("What species of animal do you want to add?");
       string speciesToAdd = Console.ReadLine();
@@ -26,10 +27,13 @@ public class Program {
       Animal animalToAdd = new Animal(speciesToAdd, habitatToAdd, dietToAdd);
       Animals.Add(animalToAdd);
       Console.WriteLine("Animal added! ID: " + Animals[animalToAdd.GetTrackingNumber()].GetTrackingNumber() + " Species: " + Animals[animalToAdd.GetTrackingNumber()].GetSpecies() + " Habitat: " + Animals[animalToAdd.GetTrackingNumber()].GetHabitat() + " Diet Category: " + Animals[animalToAdd.GetTrackingNumber()].GetDietCategory());
-
       PrintAllAnimals(Animals);
+
+      // Show all animals 
     } else if (input == "Show"){
       PrintAllAnimals(Animals);
+
+      // Ask for what to search by, then ask for the specific item and show what found in search
     } else if (input == "Search"){
       Console.WriteLine("What to search by? (species/habitat/diet)");
       string searchCriteria = Console.ReadLine();
@@ -66,14 +70,18 @@ public class Program {
       PrintAllAnimals(AnimalSearch);
     }
   }
-
+  // Print all animals found in list
   public static void PrintAllAnimals(List<Animal> Animals)
   {
     Console.WriteLine("Animals in Program:");
     Console.WriteLine(Animal.ParkArea("the Safari zone"));
+    if (Animals.Count == 0){
+      Console.WriteLine("No animals found.");
+    } else {
       foreach(Animal anAnimal in Animals)
       {
         Console.WriteLine("ID: " + anAnimal.GetTrackingNumber() + " Species: " + anAnimal.GetSpecies() + " Habitat: " + anAnimal.GetSpecies() + " Diet Category: " + anAnimal.GetDietCategory());
       }
+    }
   }
 }
